@@ -2,15 +2,18 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"personal/controllers"
+	"personal/models"
 )
 
 func main() {
+	models.SetUpDataBase()
 	routes := gin.Default()
-	routes.GET("/hello", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{"message": "Hello World"})
-	})
-	err := routes.Run()
+	user := routes.Group("/user")
+	{
+		user.POST("/signup", controllers.SignUp)
+	}
+	err := routes.Run(":8080")
 	if err != nil {
 		panic(err)
 	}
