@@ -14,8 +14,8 @@ func CreateToken(user *models.User) (string, error) {
 	secretKey := os.Getenv("SECRET_KEY")
 	claims := jwt.MapClaims{
 		"authorized": true,
-		"user_id": user.ID,
-		"exp": time.Now().Add(time.Hour * 2).Unix(),
+		"user_id":    user.ID,
+		"exp":        time.Now().Add(time.Hour * 2).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(secretKey))
@@ -42,7 +42,7 @@ func VerifyToken(r *http.Request) (*models.User, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(os.Getenv("ACCESS_SECRET")), nil
+		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
 	if err != nil || !token.Valid {
 		return nil, err
@@ -52,7 +52,7 @@ func VerifyToken(r *http.Request) (*models.User, error) {
 		return nil, err
 	}
 	var user models.User
-	if err := models.DB.First(&user, claims["user_id"].(uint)).Error; err != nil {
+	if err := models.DB.First(&user, claims["user_id"]).Error; err != nil {
 		return nil, err
 	}
 	return &user, err

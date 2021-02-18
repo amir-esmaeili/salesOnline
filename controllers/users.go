@@ -6,12 +6,10 @@ import (
 	"personal/auth"
 	"personal/forms"
 	"personal/models"
+	"time"
 )
 
-
-
-
-func SignUp(context *gin.Context)  {
+func SignUp(context *gin.Context) {
 	var signUpForm forms.SignUpForm
 	if err := context.ShouldBindJSON(&signUpForm); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Please fill the required fields"})
@@ -35,7 +33,7 @@ func SignUp(context *gin.Context)  {
 	context.JSON(http.StatusCreated, gin.H{"error": "New user created"})
 }
 
-func LogIn(context *gin.Context)  {
+func LogIn(context *gin.Context) {
 	var loginForm forms.LogInForm
 	if err := context.ShouldBindJSON(&loginForm); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Please fill the required fields"})
@@ -60,5 +58,32 @@ func LogIn(context *gin.Context)  {
 		context.Abort()
 		return
 	}
+	user.LastLogin = time.Now()
+	models.DB.Save(&user)
 	context.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+func GetProfile(context *gin.Context) {
+	user, _ := context.Get("user")
+	context.JSON(http.StatusOK, user)
+}
+
+func UpdateProfile(context *gin.Context)  {
+	userPtr, _ := context.Get("user")
+	user := userPtr.(models.User)
+	var updateProfile forms.UpdateProfileForm
+	if err := context.ShouldBindJSON(&updateProfile); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Please fill the required fields"})
+		context.Abort()
+		return
+	}
+	// If empty or not matched with standard mobile -> pass
+	if models.ValidatePhone(updateProfile.Phone) {
+		user.Phone = updateProfile.Phone
+	}
+	if updateProfile.Address != "" {
+		user.Address = updateProfile.Address
+	}
+	models.DB.Save(&user)
+	context.JSON(http.StatusOK, user)
 }

@@ -11,3 +11,8 @@ type LogInForm struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
+type UpdateProfileForm struct {
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+}
