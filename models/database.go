@@ -2,7 +2,6 @@ package models
 // Database Configs
 
 import (
-	"github.com/joho/godotenv"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"os"
@@ -11,11 +10,6 @@ import (
 var DB *gorm.DB
 
 func SetUpDataBase() {
-	// Load environment variables
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic(err)
-	}
 	dbPath := os.Getenv("DB")
 
 	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
