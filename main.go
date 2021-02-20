@@ -22,6 +22,10 @@ func main() {
 		user.GET("/profile", auth.Authenticate(), controllers.GetProfile)
 		user.PUT("/profile", auth.Authenticate(), controllers.UpdateProfile)
 	}
+	products := routes.Group("/product")
+	{
+		products.POST("/new", auth.Authenticate(), controllers.NewProduct)
+	}
 	err := routes.Run(":8080")
 	if err != nil {
 		panic(err)

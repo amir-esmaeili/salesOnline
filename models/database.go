@@ -19,6 +19,7 @@ func SetUpDataBase() {
 
 	// Migrate
 	err = db.AutoMigrate(&User{})
+	err = db.AutoMigrate(&Product{})
 	if err != nil {
 		panic(err)
 	}
