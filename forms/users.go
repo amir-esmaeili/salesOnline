@@ -1,5 +1,9 @@
 package forms
 
+import (
+	"mime/multipart"
+)
+
 type SignUpForm struct {
 	Name            string `json:"name"`
 	Email           string `json:"email"`
@@ -13,6 +17,7 @@ type LogInForm struct {
 }
 
 type UpdateProfileForm struct {
-	Address string `json:"address"`
-	Phone   string `json:"phone"`
+	Address string `form:"address"`
+	Phone   string `form:"phone"`
+	ProfileImage *multipart.FileHeader `form:"profile_image"`
 }

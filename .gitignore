@@ -90,3 +90,5 @@ Temporary Items
 
 *.db
 .env
+media/
+media/*

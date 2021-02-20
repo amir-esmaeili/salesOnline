@@ -12,6 +12,7 @@ type User struct {
 	Email          string    `json:"email" gorm:"unique"`
 	Address        string    `json:"address"`
 	Phone          string    `json:"phone"`
+	ProfileImage   string    `json:"profile_image"`
 	HashedPassword string    `json:"-"`
 	JoinedAt       time.Time `json:"joined_at" gorm:"autoCreateTime"`
 	LastLogin      time.Time `json:"last_login" gorm:"null"`
