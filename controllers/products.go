@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"personal/forms"
@@ -20,7 +21,7 @@ func NewProduct(context *gin.Context) {
 	}
 	product, valid := newProductForm.Validator(context)
 	if valid {
-		product.Seller = user
+		product.SellerID = user.ID
 		models.DB.Create(&product)
 		context.JSON(http.StatusCreated, product)
 		return
@@ -29,4 +30,12 @@ func NewProduct(context *gin.Context) {
 		"error": "Please fill the required fields",
 	})
 	return
+}
+
+func GetSellerProducts(context *gin.Context)  {
+	sellerId := context.Param("seller_id")
+	var products []models.Product
+	err := models.DB.Where("seller_id = ?", sellerId).Find(&products)
+	fmt.Println(err)
+	context.JSON(http.StatusOK, products)
 }

@@ -7,15 +7,16 @@ import (
 )
 
 type User struct {
-	ID             uint64    `json:"id"`
-	Name           string    `json:"name"`
-	Email          string    `json:"email" gorm:"unique"`
-	Address        string    `json:"address"`
-	Phone          string    `json:"phone"`
-	ProfileImage   string    `json:"profile_image"`
-	HashedPassword string    `json:"-"`
-	JoinedAt       time.Time `json:"joined_at" gorm:"autoCreateTime"`
-	LastLogin      time.Time `json:"last_login" gorm:"null"`
+	ID             uint64     `json:"id"`
+	Name           string     `json:"name"`
+	Email          string     `json:"email" gorm:"unique"`
+	Address        string     `json:"address"`
+	Phone          string     `json:"phone"`
+	ProfileImage   string     `json:"profile_image"`
+	HashedPassword string     `json:"-"`
+	JoinedAt       time.Time  `json:"joined_at" gorm:"autoCreateTime"`
+	LastLogin      time.Time  `json:"last_login" gorm:"null"`
+	Products       []Product `json:"-" gorm:"foreignKey:SellerID"`
 }
 
 func (user *User) CheckPasswordHash(password string) bool {

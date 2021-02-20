@@ -25,6 +25,7 @@ func main() {
 	products := routes.Group("/product")
 	{
 		products.POST("/new", auth.Authenticate(), controllers.NewProduct)
+		products.GET("/:seller_id", controllers.GetSellerProducts)
 	}
 	err := routes.Run(":8080")
 	if err != nil {
